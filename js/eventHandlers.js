@@ -1,6 +1,7 @@
 import { generateCard } from './cardGenerator.js';
 import { showCollection } from './collection.js';
 import { setupPrintButton } from './print.js';
+import { showLoadingBar, hideLoadingBar } from './utils.js';
 
 export function setupEventListeners() {
   document.getElementById('generateBtn').addEventListener('click', generateCard);
@@ -10,17 +11,13 @@ export function setupEventListeners() {
     initialCard.addEventListener('click', async (e) => {
       // Prevent multiple clicks during locate
       if (initialCard.classList.contains('locating')) return;
-
-      const cardBack = initialCard.querySelector('.card-back');
-      if (cardBack) {
-          cardBack.classList.add('loading');
-      }
       
       // Start locate animation
       initialCard.classList.add('locating');
       const generateBtn = document.getElementById('generateBtn');
       generateBtn.classList.add('locating');
       
+      showLoadingBar();
       try {
         // Wait for card generation
         await generateCard();
@@ -34,8 +31,9 @@ export function setupEventListeners() {
         console.error('Error during initial card locate:', error);
       } finally {
         // Remove locate animation
-        // The new card will not have the locating class, so we only need to handle the button
+        initialCard.classList.remove('locating');
         generateBtn.classList.remove('locating');
+        hideLoadingBar();
       }
     });
   }
