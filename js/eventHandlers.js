@@ -10,6 +10,11 @@ export function setupEventListeners() {
     initialCard.addEventListener('click', async (e) => {
       // Prevent multiple clicks during locate
       if (initialCard.classList.contains('locating')) return;
+
+      const cardBack = initialCard.querySelector('.card-back');
+      if (cardBack) {
+          cardBack.classList.add('loading');
+      }
       
       // Start locate animation
       initialCard.classList.add('locating');
@@ -29,7 +34,7 @@ export function setupEventListeners() {
         console.error('Error during initial card locate:', error);
       } finally {
         // Remove locate animation
-        initialCard.classList.remove('locating');
+        // The new card will not have the locating class, so we only need to handle the button
         generateBtn.classList.remove('locating');
       }
     });

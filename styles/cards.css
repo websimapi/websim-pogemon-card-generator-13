@@ -175,6 +175,29 @@
   opacity: 0.5;
 }
 
+.card-back-spinner {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  display: none;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.card-back.loading .card-back-spinner {
+  display: block;
+}
+
+.card-back.loading .card-back-logo {
+  display: none;
+}
+
 @keyframes rotateLogo {
   from {
     transform: rotate(0deg);
@@ -376,4 +399,3 @@
 .card.locating {
   animation: locateGlow 1.5s ease-in-out infinite;
 }
-
