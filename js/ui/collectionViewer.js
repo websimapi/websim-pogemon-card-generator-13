@@ -1,11 +1,10 @@
-
-```javascript
 import { getAllCards, deleteCard } from '../db.js';
 import { showToast } from '../utils.js';
 import { loadCardToMain } from '../components/card.js';
 import { showConfirmDialog, showPalaceDialog } from './dialogs.js';
 import { setupImportExport } from './importExport.js';
 import { setupPalaceToggle, handleRegisterToFlex } from './palaceIntegration.js';
+import { displayFilteredCards } from '../collection.js';
 
 export async function createCollectionViewer(showingPalace, setShowingPalace) {
   // First remove any existing viewer
@@ -100,7 +99,6 @@ function setupCloseButton(viewer, showingPalace, setShowingPalace) {
       // Load PoGeFlex collection
       getAllCards().then(cards => {
         cards.sort((a, b) => b.timestamp - a.timestamp);
-        const { displayFilteredCards } = require('../collection.js');
         displayFilteredCards(cards, [], 'single');
       });
     }
