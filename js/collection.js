@@ -1,5 +1,5 @@
 import { createMiniCard } from './components/miniCard.js';
-import { createCollectionViewer } from './ui.js';
+import { createCollectionViewer, isShowingPalace, setShowingPalace } from './ui.js';
 import { getTypeIcon } from './utils.js';
 import { getAllCards } from './db.js';
 
@@ -137,7 +137,13 @@ export async function showCollection() {
   let viewer = document.querySelector('.collection-viewer');
   
   if (!viewer) {
-    viewer = await createCollectionViewer();
+    // Pass showingPalace state and setter to the viewer creator
+    const showingPalaceState = { current: isShowingPalace() };
+    const setter = (val) => {
+      setShowingPalace(val);
+      showingPalaceState.current = val;
+    };
+    viewer = await createCollectionViewer(showingPalaceState, setter);
   }
   
   const grid = viewer.querySelector('.collection-grid');

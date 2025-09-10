@@ -17,4 +17,4 @@ export const setShowingPalace = (value) => {
 };
 
 // Re-export functions that other modules depend on
-export { handleRegisterToFlex, showImportDialog, showConfirmDialog, showPalaceDialog };
+export { createCollectionViewer, handleRegisterToFlex, showImportDialog, showConfirmDialog, showPalaceDialog };
