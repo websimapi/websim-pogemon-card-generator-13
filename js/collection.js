@@ -61,6 +61,78 @@ export function displayFilteredCards(cards, selectedTypes, filterMode, isPalaceV
   });
 }
 
+export function generateTypeTabs(cards, tabsContainer, isShowingPalace, callback) {
+  const allTypes = new Set();
+  cards.forEach(card => {
+    const typeString = isShowingPalace ? card.pogetype : card.type;
+    typeString.split('/').forEach(type => {
+      allTypes.add(type.trim());
+    });
+  });
+  
+  tabsContainer.innerHTML = `
+    <button class="type-tab" data-type="all">
+      <span>ALL</span>
+    </button>
+    ${Array.from(allTypes).sort().map(type => `
+      <button class="type-tab" data-type="${type}">
+        <div class="type-icon ${type.toLowerCase()}">${getTypeIcon(type)}</div>
+        <span>${type}</span>
+      </button>
+    `).join('')}
+  `;
+
+  let selectedTypes = new Set();
+  let filterMode = 'single'; 
+  
+  const tabs = tabsContainer.querySelectorAll('.type-tab');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', async (e) => {
+      const type = tab.dataset.type;
+      
+      if (e.ctrlKey || e.metaKey) {
+        if (filterMode !== 'and') {
+          selectedTypes.clear(); 
+          filterMode = 'and';
+        }
+        
+        if (selectedTypes.has(type)) {
+          selectedTypes.delete(type);
+        } else if (selectedTypes.size < 2) {
+          selectedTypes.add(type);
+        }
+        
+      } else if (e.shiftKey) {
+        filterMode = 'or';
+        if (selectedTypes.has(type)) {
+          selectedTypes.delete(type);
+        } else {
+          selectedTypes.add(type);
+        }
+        
+      } else {
+        filterMode = 'single';
+        selectedTypes.clear();
+        selectedTypes.add(type);
+      }
+
+      tabs.forEach(t => {
+        t.classList.remove('selected-single', 'selected-or', 'selected-and');
+        if (selectedTypes.has(t.dataset.type)) {
+          t.classList.add(`selected-${filterMode}`);
+        }
+      });
+      
+      if (type === 'all' && filterMode === 'single') {
+        selectedTypes.clear();
+      }
+      
+      // Call the callback with the current filter state
+      callback(Array.from(selectedTypes), filterMode);
+    });
+  });
+}
+
 export async function showCollection() {
   let viewer = document.querySelector('.collection-viewer');
   
@@ -86,83 +158,18 @@ export async function showCollection() {
       cards.sort((a, b) => b.timestamp - a.timestamp);
     }
     
-    const allTypes = new Set();
-    cards.forEach(card => {
-      const typeString = isShowingPalace ? card.pogetype : card.type;
-      typeString.split('/').forEach(type => {
-        allTypes.add(type.trim());
-      });
-    });
-    
-    tabsContainer.innerHTML = `
-      <button class="type-tab" data-type="all">
-        <span>ALL</span>
-      </button>
-      ${Array.from(allTypes).sort().map(type => `
-        <button class="type-tab" data-type="${type}">
-          <div class="type-icon ${type.toLowerCase()}">${getTypeIcon(type)}</div>
-          <span>${type}</span>
-        </button>
-      `).join('')}
-    `;
-
-    let selectedTypes = new Set();
-    let filterMode = 'single'; 
-    
-    const tabs = tabsContainer.querySelectorAll('.type-tab');
-    tabs.forEach(tab => {
-      tab.addEventListener('click', async (e) => {
-        const type = tab.dataset.type;
-        
-        if (e.ctrlKey || e.metaKey) {
-          if (filterMode !== 'and') {
-            selectedTypes.clear(); 
-            filterMode = 'and';
-          }
-          
-          if (selectedTypes.has(type)) {
-            selectedTypes.delete(type);
-          } else if (selectedTypes.size < 2) {
-            selectedTypes.add(type);
-          }
-          
-        } else if (e.shiftKey) {
-          filterMode = 'or';
-          if (selectedTypes.has(type)) {
-            selectedTypes.delete(type);
-          } else {
-            selectedTypes.add(type);
-          }
-          
-        } else {
-          filterMode = 'single';
-          selectedTypes.clear();
-          selectedTypes.add(type);
-        }
-
-        tabs.forEach(t => {
-          t.classList.remove('selected-single', 'selected-or', 'selected-and');
-          if (selectedTypes.has(t.dataset.type)) {
-            t.classList.add(`selected-${filterMode}`);
-          }
-        });
-        
-        const isShowingPalace = viewer.querySelector('h2').textContent.includes('PoGePalace');
-        let currentCards;
-        
-        if (isShowingPalace) {
-          currentCards = await pogepalace.collection('pogemon').getList();
-        } else {
-          currentCards = await getAllCards();
-          currentCards.sort((a, b) => b.timestamp - a.timestamp);
-        }
-        
-        if (type === 'all' && filterMode === 'single') {
-          selectedTypes.clear();
-        }
-        
-        displayFilteredCards(currentCards, Array.from(selectedTypes), filterMode, isShowingPalace);
-      });
+    // Generate type tabs with callback for filtering
+    generateTypeTabs(cards, tabsContainer, isShowingPalace, async (selectedTypes, filterMode) => {
+      let currentCards;
+      
+      if (isShowingPalace) {
+        currentCards = await pogepalace.collection('pogemon').getList();
+      } else {
+        currentCards = await getAllCards();
+        currentCards.sort((a, b) => b.timestamp - a.timestamp);
+      }
+      
+      displayFilteredCards(currentCards, selectedTypes, filterMode, isShowingPalace);
     });
     
     displayFilteredCards(cards, [], 'single', isShowingPalace);

@@ -1,8 +1,6 @@
-
-```javascript
 import { getAllCards, saveCard } from '../db.js';
 import { showToast } from '../utils.js';
-import { displayFilteredCards } from '../collection.js';
+import { displayFilteredCards, generateTypeTabs } from '../collection.js';
 
 export async function handleRegisterToFlex(palaceCardData) {
   // First check for duplicates
@@ -119,6 +117,7 @@ export function setupPalaceToggle(viewer, showingPalace, setShowingPalace) {
     
     const title = viewer.querySelector('h2');
     const grid = viewer.querySelector('.collection-grid');
+    const tabsContainer = viewer.querySelector('.collection-tabs');
     const deleteToggle = viewer.querySelector('.delete-mode-toggle');
     const importBtn = viewer.querySelector('.import-btn');
     const exportBtn = viewer.querySelector('.export-btn');
@@ -135,13 +134,23 @@ export function setupPalaceToggle(viewer, showingPalace, setShowingPalace) {
         const pogepalace = new WebsimSocket();
         const pogemons = await pogepalace.collection('pogemon').getList();
         
+        // Generate type tabs for palace view
+        generateTypeTabs(pogemons, tabsContainer, true, async (selectedTypes, filterMode) => {
+          const currentPogemons = await pogepalace.collection('pogemon').getList();
+          displayFilteredCards(currentPogemons, selectedTypes, filterMode, true);
+        });
+        
         displayFilteredCards(pogemons, [], 'single', true); // Pass true for isPalaceView
 
         // Subscribe to real-time updates
         pogepalace.collection('pogemon').subscribe((updatedPogemons) => {
           if (showingPalace.current) { // Only update if still showing palace
-            grid.innerHTML = '';
-            displayFilteredCards(updatedPogemons, [], 'single', true); // Pass true for isPalaceView
+            // Regenerate tabs when data changes
+            generateTypeTabs(updatedPogemons, tabsContainer, true, async (selectedTypes, filterMode) => {
+              const currentPogemons = await pogepalace.collection('pogemon').getList();
+              displayFilteredCards(currentPogemons, selectedTypes, filterMode, true);
+            });
+            displayFilteredCards(updatedPogemons, [], 'single', true);
           }
         });
       } catch (error) {
@@ -157,6 +166,14 @@ export function setupPalaceToggle(viewer, showingPalace, setShowingPalace) {
       // Load local collection
       const cards = await getAllCards();
       cards.sort((a, b) => b.timestamp - a.timestamp);
+      
+      // Generate type tabs for flex view
+      generateTypeTabs(cards, tabsContainer, false, async (selectedTypes, filterMode) => {
+        const currentCards = await getAllCards();
+        currentCards.sort((a, b) => b.timestamp - a.timestamp);
+        displayFilteredCards(currentCards, selectedTypes, filterMode, false);
+      });
+      
       displayFilteredCards(cards, [], 'single');
     }
   });
