@@ -1,0 +1,210 @@
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.25in;
+    padding: 0.5in;
+  }
+  
+  .print-section {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    margin: 0 !important;
+    page-break-inside: avoid !important;
+  }
+  
+  .container {
+    width: 100% !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 0.25in !important;
+    padding: 0 !important;
+  }
+
+  .card-container {
+    position: relative !important;
+    width: auto !important;
+    min-height: auto !important;
+    margin: 0 !important;
+    display: flex !important;
+    gap: 0.25in !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+  }
+
+  .card {
+    margin: 0 !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    position: relative !important;
+    transform: none !important;
+    visibility: visible !important;
+  }
+
+  @page {
+    size: letter;
+    margin: 0.5in;
+  }
+
+  #cardContainer {
+    width: 100% !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 0.25in !important;
+    padding: 0 !important;
+  }
+
+  .generate-btn,
+  .print-btn,
+  .submenu,
+  .collection-btn,
+  .collection-viewer,
+  .card-detail-modal {
+    display: none !important;
+  }
+
+  .card {
+    break-inside: avoid;
+    box-shadow: none !important;
+    transform: none !important;
+    width: 2.5in !important;
+    height: 3.5in !important;
+    margin: 0 auto !important;
+  }
+
+  .card-front {
+    position: relative !important;
+    transform: none !important;
+    width: 2.5in !important;
+    height: 3.5in !important;
+    margin: 0 auto !important;
+    box-shadow: none !important;
+    padding: 0.125in !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.05in !important;
+  }
+
+  .card-image-container {
+    margin-top: 0.25in !important;
+    width: 2.25in !important;
+    height: 1.61in !important;
+    min-height: 1.61in !important;
+    max-height: 1.61in !important;
+  }
+
+  .card-description {
+    flex: 1 !important;
+    width: 2.25in !important;
+    padding: 0.1in !important;
+    margin-top: 0.025in !important;
+    min-height: 1.89in !important;
+    max-height: 1.89in !important;
+  }
+
+  .pokemon-description {
+    font-size: 0.095in !important;
+    line-height: 1.4 !important;
+    -webkit-line-clamp: 15 !important; 
+    width: 100% !important;
+  }
+
+  .pokemon-name {
+    font-size: 0.17in !important;
+    top: 0.05in !important;
+    left: 0.125in !important;
+  }
+
+  .stats-container {
+    top: 0.05in !important;
+    right: 0.125in !important;
+    padding: 0.025in 0.05in !important;
+  }
+
+  .type-icon {
+    width: 0.117in !important;
+    height: 0.117in !important;
+    border-radius: 0.025in !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0.017in !important;
+  }
+
+  .type-icon svg {
+    width: 0.083in !important;
+    height: 0.083in !important;
+    visibility: visible !important;
+  }
+
+  .pokemon-stats {
+    font-size: 0.105in !important;
+  }
+
+  .pokemon-image {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  .card-description {
+    width: 2.25in !important;
+    padding: 0.1in !important;
+    margin-top: 0.025in !important;
+    min-height: 1.89in !important; 
+    max-height: 1.89in !important;
+  }
+
+  .pokemon-description {
+    font-size: 0.095in !important;
+    line-height: 1.4 !important;
+    width: 100% !important;
+  }
+
+  .type-icon, .type-icon svg path {
+    fill: currentColor !important;
+    color: inherit !important;
+  }
+
+  .fire { background-color: #FF4422 !important; color: white !important; }
+  .water { background-color: #3399FF !important; color: white !important; }
+  .grass { background-color: #77CC55 !important; color: white !important; }
+  .electric { background-color: #FFCC33 !important; color: black !important; }
+  .ice { background-color: #66CCFF !important; color: black !important; }
+  .fighting { background-color: #BB5544 !important; color: white !important; }
+  .poison { background-color: #AA5599 !important; color: white !important; }
+  .ground { background-color: #DDBB55 !important; color: black !important; }
+  .flying { background-color: #8899FF !important; color: white !important; }
+  .psychic { background-color: #FF5599 !important; color: white !important; }
+  .bug { background-color: #AABB22 !important; color: white !important; }
+  .rock { background-color: #BBAA66 !important; color: white !important; }
+  .ghost { background-color: #6666BB !important; color: white !important; }
+  .dragon { background-color: #7766EE !important; color: white !important; }
+  .dark { background-color: #775544 !important; color: white !important; }
+  .steel { background-color: #AAAABB !important; color: black !important; }
+  .fairy { background-color: #EE99EE !important; color: black !important; }
+  .air { background-color: #B4D4E4 !important; color: black !important; }
+  .sound { background-color: #9B6B9E !important; color: white !important; }
+  .nature { background-color: #5A9E54 !important; color: white !important; }
+  .earth { background-color: #BC9260 !important; color: white !important; }
+  .plant { background-color: #4CAF50 !important; color: white !important; }
+
+  .card-front[style*="background"] {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  .cosmic { 
+    background-color: #7C4DFF !important; 
+    color: white !important; 
+  }
+}
+
